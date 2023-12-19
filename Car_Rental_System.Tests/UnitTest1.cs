@@ -8,8 +8,7 @@ namespace Car_Rental_System.Tests
         private const string connectionString = "Server=DESKTOP-SRQUN8T;Database=CAR_RENTAL_SYSTEM;Trusted_Connection=True";
 
         [Test]
-        //[Ignore("ignoring")]
-        public void TestToGetAllProducts()
+        public void TestToGetAllVehicles()
         {
             //Arrange or Assign
             CarLeaseRepository carleaseRepository = new CarLeaseRepository();

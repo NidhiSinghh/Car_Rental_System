@@ -68,8 +68,8 @@ The application connects to a SQL database with the following tables:
 
 ## Getting Started
 
-1. Clone the repository: `git clone https://github.com/your-username/Car-Rental-System.git`
-2. Set up your SQL database and update connection details in `DBPropertyUtil` and `DBConnUtil` classes.
+1. Clone the repository: `git clone https://github.com/NidhiSinghh/Car_Rental_System.git`
+2. Set up your SQL database and update connection details in `DBUtil` class and appsettings.json file.
 
 ## Packages Used
 
@@ -83,7 +83,7 @@ The Car Rental System project utilizes the following key packages:
    
 ## Running the Application
 
-Compile and run the `MainModule` class to start the menu-driven application.
+Compile and run the `Program.cs` class to start the menu-driven application.
 
 ## Unit Testing
 

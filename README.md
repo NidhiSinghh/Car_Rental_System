@@ -11,7 +11,7 @@ The project follows an object-oriented design and is organized into the followin
 - **model:** Contains entity classes representing real-world entities (e.g., Customer, Vehicle, Lease).
 - **repository:** Provides the data access layer with interfaces and their implementations for database interactions.
 - **exception:** Defines custom exceptions for error handling.
-- **util:** Includes utility classes for database connection and property handling.
+- **utility:** Includes utility classes for database connection and property handling.
 - **main:** Contains the MainModule class for demonstrating system functionalities in a menu-driven application.
 
 ## Key Functionalities

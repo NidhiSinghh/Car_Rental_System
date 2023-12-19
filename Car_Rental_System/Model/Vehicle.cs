@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 namespace Car_Rental_System.Model
 {
     public class Vehicle
-    {       
+    {
         public int VehicleId { get; set; }
-        public string Make {  get; set; }
-        public string Model {  get; set; }
-        public string Year {  get; set; }
-        public double DailyRate {  get; set; }
-        public string Status {  get; set; }
-        public int? PassengerCapacity {  get; set; }
-        public int? EngineCapacity {  get; set; }
+        public string Make { get; set; }
+        public string Model { get; set; }
+        public string Year { get; set; }
+        public double DailyRate { get; set; }
+        public string Status { get; set; }
+        public int? PassengerCapacity { get; set; }
+        public int? EngineCapacity { get; set; }
 
         //public Vehicle() { }
 
@@ -36,6 +36,6 @@ namespace Car_Rental_System.Model
         {
             //return $"Id:{VehicleId}";
             return $"Id:{VehicleId}\tMake:{Make}\tModel:{Model}\tDailyRate={DailyRate}\tYear:{Year}\tStatus:{Status}\tPassengerCapacity:{PassengerCapacity}\tEngine Capacity:{EngineCapacity}";
-      }
+        }
     }
 }

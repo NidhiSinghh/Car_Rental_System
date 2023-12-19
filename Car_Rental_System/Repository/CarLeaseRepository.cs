@@ -19,7 +19,7 @@ namespace Car_Rental_System.Repository
         //Sql Connection and Sql Command
         public string connectionString;
         SqlCommand cmd = null;
-      
+
 
         public CarLeaseRepository()
         {
@@ -29,8 +29,6 @@ namespace Car_Rental_System.Repository
 
 
         }
-
-  
 
 
         //--------------------------------------------------------------Lease management---------------------------------------------------
@@ -187,7 +185,7 @@ namespace Car_Rental_System.Repository
                     leaseDetails.CustomerId = (int)reader["customer_ID"];
                     leaseDetails.StartDate = (DateTime)reader["start_Date"];
                     leaseDetails.EndDate = (DateTime)reader["end_Date"];
-                   leaseDetails.LeaseType = (string)reader["lease_Type"];
+                    leaseDetails.LeaseType = (string)reader["lease_Type"];
 
                     histLease.Add(leaseDetails);
                 }
@@ -197,14 +195,14 @@ namespace Car_Rental_System.Repository
 
         }
 
-            #endregion
+        #endregion
 
 
-            //--------------------------------------------------------------Car management---------------------------------------------------
+        //--------------------------------------------------------------Car management---------------------------------------------------
 
-         #region List available cars
+        #region List available cars
 
-            public List<Vehicle> listAvailableCars()
+        public List<Vehicle> listAvailableCars()
         {
             List<Vehicle> availableVehicles = new List<Vehicle>();
 
@@ -517,25 +515,25 @@ namespace Car_Rental_System.Repository
 
 
                 SqlDataReader reader = cmd.ExecuteReader();
-                
 
-                    while (reader.Read())
+
+                while (reader.Read())
+                {
+
+                    Customer customerAccToId = new Customer
                     {
 
-                        Customer customerAccToId = new Customer
-                        {
+                        CustomerId = (int)reader["customer_Id"],
+                        FirstName = (string)reader["first_Name"],
+                        LastName = (string)reader["last_Name"],
+                        Email = (string)reader["email"],
+                        Phone = (string)reader["phone_Number"],
+                    };
+                    return customerAccToId;
+                }
+                throw new CustomerNotFoundException($"Customer with id {custId} not found");
 
-                            CustomerId = (int)reader["customer_Id"],
-                            FirstName = (string)reader["first_Name"],
-                            LastName = (string)reader["last_Name"],
-                            Email = (string)reader["email"],
-                            Phone = (string)reader["phone_Number"],
-                        };
-                        return customerAccToId;
-                    }
-                    throw new CustomerNotFoundException($"Customer with id {custId} not found");
 
-                
             }
 
         }
@@ -619,21 +617,21 @@ namespace Car_Rental_System.Repository
         #region Record Payment
         public int recordPayment(Payment payment1)
         {
-            using(SqlConnection sqlConnection = new SqlConnection())
+            using (SqlConnection sqlConnection = new SqlConnection())
             {
                 cmd.Parameters.Clear();
-                cmd.CommandText="INSERT INTO PAYMENTS VALUES(@lease_ID, @payment_Date, @amount)";
-                cmd.Parameters.AddWithValue("@leaseid",payment1.LeaseId);
+                cmd.CommandText = "INSERT INTO PAYMENTS VALUES(@lease_ID, @payment_Date, @amount)";
+                cmd.Parameters.AddWithValue("@leaseid", payment1.LeaseId);
                 cmd.Parameters.AddWithValue("@payment_Date", payment1.PaymentDate);
                 cmd.Parameters.AddWithValue("@amount", payment1.Amount);
 
                 cmd.Connection = sqlConnection;
                 sqlConnection.Open();
-                int payRecordStatus=cmd.ExecuteNonQuery();
+                int payRecordStatus = cmd.ExecuteNonQuery();
                 return payRecordStatus;
 
             }
-            
+
         }
 
         #endregion

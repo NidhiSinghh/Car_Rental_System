@@ -36,20 +36,20 @@ while (true)
     Console.WriteLine("14. Return Car(lease info) for a lease id");
     Console.WriteLine("--------------------------------------------------------Payment Management-------------------------");
     Console.WriteLine("15.Record payment");
-    ////Console.WriteLine("15. Return Vehicle back to the leaser");
+    Console.WriteLine("");
     try
     {
         Console.WriteLine("Enter your choice");
         int choice = int.Parse(Console.ReadLine());
-   
-    switch (choice)
-    {
-        case 1:
-            icarLeaseService.GetAllVehicle();
-            break;
-        case 2:
-            icarLeaseService.AddVehicle();
-            break;
+
+        switch (choice)
+        {
+            case 1:
+                icarLeaseService.GetAllVehicle();
+                break;
+            case 2:
+                icarLeaseService.AddVehicle();
+                break;
             case 3:
                 icarLeaseService.listAvailableCars();
                 break;
@@ -87,18 +87,16 @@ while (true)
             case 14:
                 icarLeaseService.returnCarInfo();
                 break;
-            ////case 15:
-            ////    icarLeaseService.returnCarBack();
-            ////    break;
+           
             case 15:
                 icarLeaseService.recordPayment();
                 break;
             default:
                 Console.WriteLine("Enter correct choice");
                 break;
-    
 
-    }
+
+        }
     }
     catch (Exception ex)
     {

@@ -1,9 +1,5 @@
 ﻿using Car_Rental_System.Model;
-//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
+
 
 namespace Car_Rental_System.Repository
 {
@@ -35,13 +31,13 @@ namespace Car_Rental_System.Repository
 
         Lease returnCarInfo(int leaseId);
 
-        //optionals: //int returnCarBack(int leaseId);
+       
 
 
         //-------------------------------Payment Handling-------------------------
         int recordPayment(Payment payment1);
 
-        
+
 
 
 

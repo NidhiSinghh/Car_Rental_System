@@ -18,7 +18,7 @@ namespace Car_Rental_System.Service
 
         public CarLeaseService()
         {
-             icarLeaseRepository = new CarLeaseRepository();
+            icarLeaseRepository = new CarLeaseRepository();
         }
 
         //--------------------------------------------------------------Lease management---------------------------------------------------
@@ -31,7 +31,7 @@ namespace Car_Rental_System.Service
                 Lease returnedLeaseInfo = icarLeaseRepository.returnCarInfo(enteredLeaseId);
                 Console.WriteLine(returnedLeaseInfo);
             }
-            catch(LeaseNotFoundException ex)
+            catch (LeaseNotFoundException ex)
             {
                 Console.WriteLine($"{ex.Message}");
             }
@@ -107,15 +107,16 @@ namespace Car_Rental_System.Service
                 Console.WriteLine("Enter vehicle ID:");
                 int vehicleId = int.Parse(Console.ReadLine());
                 List<Vehicle> foundVehicle = icarLeaseRepository.findCarById(vehicleId);
-                //check whether vehicle exists
-                if (foundVehicle != null)
+                //check whether vehicle exists and whether that vehicle is avialable for lease
+                if (foundVehicle != null && foundVehicle[0].Status == "Available")
                 {
                     Console.WriteLine("Enter customer ID:");
                     int customerId = int.Parse(Console.ReadLine());
                     Customer foundCustomer = icarLeaseRepository.findCustomerById(customerId);
-
+                    //checks if customer exists
                     if (foundCustomer != null)
                     {
+
                         Console.WriteLine("Enter start date (yyyy-MM-dd):");
                         DateTime startDate = DateTime.Parse(Console.ReadLine());
 
@@ -151,9 +152,15 @@ namespace Car_Rental_System.Service
                         throw new CustomerNotFoundException($"Customer with ID {customerId} not found.");
                     }
                 }
-                else
+                //handles condition when vehicle is not found
+                else if (foundVehicle == null || foundVehicle.Count == 0)
                 {
                     throw new CarNotFoundException($"Vehicle with ID {vehicleId} not found.");
+                }
+                //handles condition when vehicle is found but it not available for lease
+                else
+                {
+                    Console.WriteLine("Selected vehicle is not available for lease.");
                 }
             }
             catch (SqlException ex)
@@ -198,7 +205,7 @@ namespace Car_Rental_System.Service
                 int e_capacity = int.Parse(Console.ReadLine());
                 Console.WriteLine("Enter passenger capacity of the vehicle");
                 int p_capacity = int.Parse(Console.ReadLine());
-                Vehicle addVehicle = new Vehicle() { Make = make, Model = model, Year = year, DailyRate = dailyRate, Status =status, PassengerCapacity = p_capacity, EngineCapacity = e_capacity };
+                Vehicle addVehicle = new Vehicle() { Make = make, Model = model, Year = year, DailyRate = dailyRate, Status = status, PassengerCapacity = p_capacity, EngineCapacity = e_capacity };
                 int addVehicleStatus = icarLeaseRepository.AddVehicle(addVehicle);
                 if (addVehicleStatus > 0)
                 {
@@ -346,12 +353,12 @@ namespace Car_Rental_System.Service
             catch (SqlException ex)
             {
                 Console.WriteLine($"Database error: {ex.Message}");
-                
+
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"An unexpected error occurred: {ex.Message}");
-                
+
             }
 
 
@@ -423,7 +430,7 @@ namespace Car_Rental_System.Service
                 Console.WriteLine("Enter phone number");
                 string pno = Console.ReadLine();
 
-                Customer addCust = new Customer() { FirstName = fname, LastName =lname, Email =email, Phone =pno };
+                Customer addCust = new Customer() { FirstName = fname, LastName = lname, Email = email, Phone = pno };
                 int addCustStatus = icarLeaseRepository.AddCustomer(addCust);
                 if (addCustStatus != 0)
                 {
@@ -521,8 +528,8 @@ namespace Car_Rental_System.Service
                 {
                     throw new LeaseNotFoundException($"Lease with Id:{lId} not found");
                 }
-                
-                
+
+
             }
             catch (SqlException ex)
             {

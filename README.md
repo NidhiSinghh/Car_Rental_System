@@ -5,14 +5,22 @@
 This is a simple Car Rental System implemented in C#. The system allows users to manage customers, vehicles, leases, and payments.
 
 ## Project Structure
-
-The project follows an object-oriented design and is organized into the following packages:
+### Car_Rental_System
+This the main project that follows an object-oriented design and is organized into the following packages:
 
 - **model:** Contains entity classes representing real-world entities (e.g., Customer, Vehicle, Lease).
 - **repository:** Provides the data access layer with interfaces and their implementations for database interactions.
 - **exception:** Defines custom exceptions for error handling.
 - **utility:** Includes utility classes for database connection and property handling.
 - **main:** Contains the MainModule class for demonstrating system functionalities in a menu-driven application.
+
+### Car_Rental_System.Tests
+This project includes unit tests for the Car Rental System to ensure the correctness of the system. The tests are organized in the `UnitTest1.cs` file.
+- **UnitTest1.cs**:
+   - **TestToAddVehicle**: Tests if a vehicle is created successfully in the database.
+   - **TestToCreateLease**: Tests if a lease is created successfully in the database.
+   - **TestToLeaseRetrieval**: Tests if a lease is retrieved successfully from the database.
+   - **Test_Exception_Thrown_On_Not_Found**: Tests if exceptions are thrown correctly when customer ID, car ID, or lease ID is not found in the database.
 
 ## Key Functionalities
 
@@ -69,7 +77,7 @@ The application connects to a SQL database with the following tables:
 ## Getting Started
 
 1. Clone the repository: `git clone https://github.com/NidhiSinghh/Car_Rental_System.git`
-2. Set up your SQL database and update connection details in `DBUtil` class and appsettings.json file.
+2. Set up your SQL database and update connection details in `DBUtil` class and `appsettings.json` file.
 
 ## Packages Used
 
@@ -84,10 +92,6 @@ The Car Rental System project utilizes the following key packages:
 ## Running the Application
 
 Compile and run the `Program.cs` class to start the menu-driven application.
-
-## Unit Testing
-
-Unit test cases are essential to ensure the correctness and reliability of the system. Use NUnit syntax for writing test cases.
 
 ## Contributors
 

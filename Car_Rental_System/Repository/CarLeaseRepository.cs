@@ -38,8 +38,8 @@ namespace Car_Rental_System.Repository
 
         public int createLease(Lease lease1)
         {
-            try
-            {
+            //try
+            //{
                 using (SqlConnection sqlConnection = new SqlConnection(connectionString))
                 {
                     cmd.Parameters.Clear();
@@ -52,24 +52,33 @@ namespace Car_Rental_System.Repository
                     cmd.Parameters.AddWithValue("@ltype", lease1.LeaseType);
                     cmd.Connection = sqlConnection;
                     sqlConnection.Open();
+
                     int createLeaseStatus = cmd.ExecuteNonQuery();
-                    return createLeaseStatus;
+                //return createLeaseStatus;
+
+                // Update the vehicle status to 'Not available'
+                cmd.Parameters.Clear();
+                cmd.CommandText = "UPDATE VEHICLES SET vehicle_Status = 'Not available' WHERE vehicle_Id = @vehicleId";
+                cmd.Parameters.AddWithValue("@vehicleId", lease1.VehicleId);
+
+                cmd.ExecuteNonQuery();
+                return createLeaseStatus;
 
                 }
-            }
-            catch (SqlException ex)
-            {
-                // Handle SQL Server-related exceptions
-                Console.WriteLine($"Database error: {ex.Message}");
-                // You can throw a custom exception or log the error, depending on your application's requirements
-                throw;
-            }
-            catch (Exception ex)
-            {
-                // Handle other unexpected exceptions
-                Console.WriteLine($"An unexpected error occurred: {ex.Message}");
-                throw;
-            }
+            //}
+            //catch (SqlException ex)
+            //{
+                
+            //    Console.WriteLine($"Database error: {ex.Message}");
+                
+            //    throw;
+            //}
+            //catch (Exception ex)
+            //{
+            //    // Handle other unexpected exceptions
+            //    Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+            //    throw;
+            //}
         }
         #endregion
 
@@ -192,6 +201,36 @@ namespace Car_Rental_System.Repository
 
             }
             return histLease;
+
+        }
+
+        #endregion
+
+        #region Remove a Lease Record
+        public int RemoveLease(int removeLeaseId)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            {
+                cmd.Parameters.Clear();
+                StringBuilder sb = new StringBuilder();
+                sb.Append("DELETE  from LEASE ");
+                sb.Append("WHERE lease_ID=@rlease_Id");
+
+                cmd.CommandText = sb.ToString();
+                cmd.Parameters.AddWithValue("@rlease_Id", removeLeaseId);
+                cmd.Connection = sqlConnection;
+
+                sqlConnection.Open();
+                int delLeaseStatus = cmd.ExecuteNonQuery();
+
+                if (delLeaseStatus == 0)
+                {
+                    throw new LeaseNotFoundException($"The lease with id {removeLeaseId} does not exist");
+                }
+
+                return delLeaseStatus;
+            }
+
 
         }
 
@@ -342,7 +381,7 @@ namespace Car_Rental_System.Repository
         #endregion
 
 
-        #region Add car
+        #region Add vehicle
 
         public int AddVehicle(Vehicle vehicle1)
         {
@@ -350,17 +389,31 @@ namespace Car_Rental_System.Repository
             using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             {
                 cmd.Parameters.Clear();
-                cmd.CommandText = "insert into VEHICLES values ( @make,@model,@manufacture_Year,@daily_Rate,@vehicle_Status,@passenger_Capacity,@engine_Capacity)";
+                cmd.CommandText = "SELECT COUNT(*) FROM VEHICLES WHERE make = @make AND model = @model";
                 cmd.Parameters.AddWithValue("@make", vehicle1.Make);
                 cmd.Parameters.AddWithValue("@model", vehicle1.Model);
-                cmd.Parameters.AddWithValue("@manufacture_Year", vehicle1.Year);
-                cmd.Parameters.AddWithValue("@daily_Rate", vehicle1.DailyRate);
-                cmd.Parameters.AddWithValue("@vehicle_Status", vehicle1.Status);
-                cmd.Parameters.AddWithValue("@passenger_Capacity", vehicle1.PassengerCapacity);
-                cmd.Parameters.AddWithValue("@engine_Capacity", vehicle1.EngineCapacity);
                 cmd.Connection = sqlConnection;
                 sqlConnection.Open();
-                int addVehicleStatus = cmd.ExecuteNonQuery();
+
+                int existingVehicle = (int)cmd.ExecuteScalar();
+                if (existingVehicle > 0)
+                {
+                    throw new DuplicateVehicleException("Vehicle already exists.");
+                }
+                else
+                {
+                    cmd.Parameters.Clear();
+                    cmd.CommandText = "Insert into VEHICLES values ( @make,@model,@manufacture_Year,@daily_Rate,@vehicle_Status,@passenger_Capacity,@engine_Capacity)";
+                    cmd.Parameters.AddWithValue("@make", vehicle1.Make);
+                    cmd.Parameters.AddWithValue("@model", vehicle1.Model);
+                    cmd.Parameters.AddWithValue("@manufacture_Year", vehicle1.Year);
+                    cmd.Parameters.AddWithValue("@daily_Rate", vehicle1.DailyRate);
+                    cmd.Parameters.AddWithValue("@vehicle_Status", vehicle1.Status);
+                    cmd.Parameters.AddWithValue("@passenger_Capacity", vehicle1.PassengerCapacity);
+                    cmd.Parameters.AddWithValue("@engine_Capacity", vehicle1.EngineCapacity);
+                }
+                 int addVehicleStatus = cmd.ExecuteNonQuery();
+                
                 return addVehicleStatus;
 
             }
@@ -454,9 +507,6 @@ namespace Car_Rental_System.Repository
 
 
 
-
-
-
         //------------------------------Customer Management-------------------------
 
         #region Add customer
@@ -490,16 +540,10 @@ namespace Car_Rental_System.Repository
         public Customer findCustomerById(int custId)
         {
 
-            //Customer customerAccToId = new Customer();
+            
             using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             {
-                //if i initialize it first like this:
-                //Customer customerAccToId = new Customer();
-                //                    99
-                //    Id::0    first Name::last Name:      Email: Phone:
-
-                //Customer customerAccToId = new Customer();
-                // Customer customerAccToId;
+                
 
 
                 StringBuilder sb = new StringBuilder();
@@ -617,11 +661,11 @@ namespace Car_Rental_System.Repository
         #region Record Payment
         public int recordPayment(Payment payment1)
         {
-            using (SqlConnection sqlConnection = new SqlConnection())
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             {
                 cmd.Parameters.Clear();
                 cmd.CommandText = "INSERT INTO PAYMENTS VALUES(@lease_ID, @payment_Date, @amount)";
-                cmd.Parameters.AddWithValue("@leaseid", payment1.LeaseId);
+                cmd.Parameters.AddWithValue("@lease_ID", payment1.LeaseId);
                 cmd.Parameters.AddWithValue("@payment_Date", payment1.PaymentDate);
                 cmd.Parameters.AddWithValue("@amount", payment1.Amount);
 
@@ -636,10 +680,48 @@ namespace Car_Rental_System.Repository
 
         #endregion
 
+        #region Get all payments
 
+        public List<Payment> GetAllPayments()
+        {
+            List<Payment> payments = new List<Payment>();
+
+            try
+            {
+
+                using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+                {
+                    cmd.Parameters.Clear();
+                    cmd.CommandText = "select * from PAYMENTS";
+                    cmd.Connection = sqlConnection;
+                    sqlConnection.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        Payment payment1 = new Payment();
+                        payment1.PaymentId = (int)reader["payment_Id"];
+                        payment1.LeaseId = (int)reader["lease_ID"];
+                        payment1.PaymentDate = (DateTime)reader["payment_Date"];
+                        payment1.Amount = (double)reader["amount"];
+                        payments.Add(payment1);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return payments;
+
+        }
+
+        #endregion
 
     }
 };
+
 
 
 

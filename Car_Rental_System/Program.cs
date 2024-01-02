@@ -17,7 +17,7 @@ while (true)
     Console.WriteLine("-------------------------------------------------------------MENU-----------------------------------------------------------------");
     Console.WriteLine("");
     Console.WriteLine("-------------------------------------------------------------------Car management---------------------------------------------------");
-    Console.WriteLine("1. GetAllVehicles");
+    Console.WriteLine("1. Get All Vehicles");
     Console.WriteLine("2. Add Vehicle");
     Console.WriteLine("3.Get List of available cars");
     Console.WriteLine("4.Get List of rented cars");
@@ -33,9 +33,12 @@ while (true)
     Console.WriteLine("11.Create Lease");
     Console.WriteLine("12. List Lease Histrory");
     Console.WriteLine("13. List active lease");
-    Console.WriteLine("14. Return Car(lease info) for a lease id");
+    Console.WriteLine("14. RemoveLease");
+    Console.WriteLine("15. Return Car(lease info) for a lease id");
     Console.WriteLine("--------------------------------------------------------Payment Management-------------------------");
-    Console.WriteLine("15.Record payment");
+    Console.WriteLine("16.Record payment");
+    Console.WriteLine("17. Get All Payments");
+
     Console.WriteLine("");
     try
     {
@@ -85,12 +88,19 @@ while (true)
                 icarLeaseService.ListActiveLease();
                 break;
             case 14:
+                icarLeaseService.RemoveLease();
+                break;
+            case 15:
                 icarLeaseService.returnCarInfo();
                 break;
            
-            case 15:
+            case 16:
                 icarLeaseService.recordPayment();
                 break;
+            case 17:
+                icarLeaseService.GetAllPayments();
+                break;
+            
             default:
                 Console.WriteLine("Enter correct choice");
                 break;

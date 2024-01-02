@@ -22,6 +22,8 @@ namespace Car_Rental_System.Service
         }
 
         //--------------------------------------------------------------Lease management---------------------------------------------------
+
+        #region Return car info
         public void returnCarInfo()
         {
             try
@@ -46,6 +48,7 @@ namespace Car_Rental_System.Service
 
             }
         }
+        #endregion
 
 
         #region Active Lease
@@ -108,7 +111,7 @@ namespace Car_Rental_System.Service
                 int vehicleId = int.Parse(Console.ReadLine());
                 List<Vehicle> foundVehicle = icarLeaseRepository.findCarById(vehicleId);
                 //check whether vehicle exists and whether that vehicle is avialable for lease
-                if (foundVehicle != null && foundVehicle[0].Status == "Available")
+                if (foundVehicle != null && foundVehicle[0].Status.ToUpper() == "AVAILABLE")
                 {
                     Console.WriteLine("Enter customer ID:");
                     int customerId = int.Parse(Console.ReadLine());
@@ -184,6 +187,35 @@ namespace Car_Rental_System.Service
 
         #endregion
 
+        #region RemoveLease
+        public void RemoveLease()
+        {
+            try
+            {
+                Console.WriteLine("Enter lease id");
+                int delLeaseId = int.Parse(Console.ReadLine());
+                int delLeaseStatus = icarLeaseRepository.RemoveLease(delLeaseId);
+                if (delLeaseStatus != 0)
+                {
+                    Console.WriteLine("Lease has been deleted succesfully");
+                }
+            }
+            catch (LeaseNotFoundException ex)
+            {
+                Console.WriteLine($"LeaseNotFoundException:{ex.Message}");
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine($"Database error: {ex.Message}");
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+
+            }
+        }
+        #endregion
         //-------------------------------------------------------------------Car management---------------------------------------------------
 
         #region Add vehicle
@@ -193,7 +225,7 @@ namespace Car_Rental_System.Service
             {
                 Console.WriteLine("Enter make of the vehicle");
                 string make = Console.ReadLine();
-                Console.WriteLine("Enter modelof the vehicle");
+                Console.WriteLine("Enter model of the vehicle");
                 string model = Console.ReadLine();
                 Console.WriteLine("Enter year of making of the vehicle");
                 string year = Console.ReadLine();
@@ -215,6 +247,10 @@ namespace Car_Rental_System.Service
                 {
                     Console.WriteLine("Vehicle Addition Failed");
                 }
+            }
+            catch (DuplicateVehicleException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             catch (SqlException ex)
             {
@@ -527,9 +563,14 @@ namespace Car_Rental_System.Service
                 else
                 {
                     throw new LeaseNotFoundException($"Lease with Id:{lId} not found");
+
                 }
 
 
+            }
+
+           catch (LeaseNotFoundException ex) {
+                Console.WriteLine($"LeaseNotFoundException: {ex.Message}");
             }
             catch (SqlException ex)
             {
@@ -545,6 +586,33 @@ namespace Car_Rental_System.Service
 
 
         }
+
+        #endregion
+
+        #region GetAllPayments
+        public void GetAllPayments()
+        {
+            try
+            {
+                List<Payment> allPaymentRecords=icarLeaseRepository.GetAllPayments();
+                foreach (var item in allPaymentRecords)
+                {
+                    Console.WriteLine(item);
+                }
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine($"Database error: {ex.Message}");
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+
+            }
+        }
+
+       
         #endregion
     }
 }

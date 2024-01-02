@@ -30,12 +30,14 @@ namespace Car_Rental_System.Repository
 
 
         Lease returnCarInfo(int leaseId);
+        int RemoveLease(int removeLeaseId);
 
-       
+
 
 
         //-------------------------------Payment Handling-------------------------
         int recordPayment(Payment payment1);
+       List<Payment> GetAllPayments();
 
 
 

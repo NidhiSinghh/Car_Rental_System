@@ -30,11 +30,11 @@ namespace Car_Rental_System.Model
         //    Status = status;
         //    PassengerCapacity = passCapacity;
         //    EngineCapacity = engineCapacity;
-
+         
         //}
         public override string ToString()
         {
-            //return $"Id:{VehicleId}";
+            
             return $"Id:{VehicleId}\tMake:{Make}\tModel:{Model}\tDailyRate={DailyRate}\tYear:{Year}\tStatus:{Status}\tPassengerCapacity:{PassengerCapacity}\tEngine Capacity:{EngineCapacity}";
         }
     }

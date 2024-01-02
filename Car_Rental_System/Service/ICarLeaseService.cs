@@ -30,11 +30,11 @@ namespace Car_Rental_System.Service
         void listLeaseHistory();
         void ListActiveLease();
         void returnCarInfo();
-        //optional:
-        // void returnCarBack();
-
+        void RemoveLease();
+       
         //------------------------------Payment Management-------------------------
         void recordPayment();
 
+        void GetAllPayments();
     }
 }

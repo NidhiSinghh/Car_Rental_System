@@ -35,7 +35,9 @@ lease_type VARCHAR(30) NOT NULL
 FOREIGN KEY(vehicle_ID) REFERENCES VEHICLES(vehicle_ID),
 FOREIGN KEY(customer_ID) REFERENCES CUSTOMERS(customer_Id)
 )
-CREATE TABLE PAYMENTS
+
+
+CREATE TABLE PAYMENTS
 (
 payment_ID INT IDENTITY PRIMARY KEY,
 lease_ID INT NOT NULL,
@@ -181,12 +183,18 @@ INSERT INTO LEASE(vehicle_ID, customer_ID, start_Date, end_Date, lease_type)
 VALUES (@vehicleId, @customerId, @startDate, @endDate, @leasetype)
 
  --2. void returnCar(int leaseID);
---returnCar(int leaseID); (while returning a car,update the End DateDECLARE @returnleaseId INTSET @returnleaseId=11;UPDATE LEASESET end_date=CAST( GETDATE() AS Date ) WHERE lease_ID=@returnleaseId
+--returnCar(int leaseID); (while returning a car,update the End Date
+DECLARE @returnleaseId INT
+SET @returnleaseId=11;
+UPDATE LEASE
+SET end_date=CAST( GETDATE() AS Date ) WHERE lease_ID=@returnleaseId
 
 --3. List<Lease> listActiveLeases();
 --Give list of active leases
 SELECT lease_ID as Active_lease_id FROM LEASE WHERE CAST( GETDATE() AS Date ) BETWEEN start_Date AND end_Date;
---4. List<Lease> listLeaseHistory();--list lease history
+
+--4. List<Lease> listLeaseHistory();
+--list lease history
 SELECT customer_ID,vehicle_ID,start_Date,end_date FROM LEASE 
 ORDER BY customer_ID,start_Date DESC ,end_date DESC
 
@@ -233,12 +241,3 @@ on p.lease_ID = l.lease_ID
 
 
 
-
-
---____________________________
---update customer details
-
---change vehivle status
-
---Calculate the total cost of a lease based on the type (Daily or Monthly) and the number
---of days or months.
